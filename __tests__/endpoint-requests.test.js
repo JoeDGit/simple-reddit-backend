@@ -37,3 +37,36 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+describe("GET /api/articles", () => {
+  test("status: 200, should respond with an array of article objects, each with specific properties", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toHaveLength(12);
+        expect.objectContaining({
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(Number),
+          votes: expect.any(Number),
+          comment_count: expect.any(Number),
+        });
+      });
+  });
+
+  test("should return the articles sorted by date in descending order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+});
