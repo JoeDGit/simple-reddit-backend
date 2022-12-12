@@ -46,14 +46,19 @@ describe("GET /api/articles", () => {
       .then((response) => {
         const articles = response.body.articles;
         expect(articles).toHaveLength(12);
-        expect.objectContaining({
-          title: expect.any(String),
-          topic: expect.any(String),
-          author: expect.any(String),
-          body: expect.any(String),
-          created_at: expect.any(Number),
-          votes: expect.any(Number),
-          comment_count: expect.any(Number),
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(String),
+              article_id: expect.any(Number),
+            })
+          );
         });
       });
   });
