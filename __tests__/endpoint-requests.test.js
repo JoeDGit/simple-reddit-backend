@@ -25,6 +25,7 @@ describe("GET /api/topics", () => {
       .expect(200)
       .then((response) => {
         const topics = response.body.topics;
+        expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
           expect(topic).toEqual(
             expect.objectContaining({
