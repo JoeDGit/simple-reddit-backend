@@ -75,3 +75,45 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id", () => {
+  test("status: 200, should return a single object with specified properties", () => {
+    return request(app)
+      .get("/api/articles/2")
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toEqual(
+          expect.objectContaining({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+  test("status: 400, should return bad request when user tries to enter an invalid articleId", () => {
+    return request(app)
+      .get("/api/articles/9jieqio")
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("400 Error - Bad Request");
+      });
+  });
+  test("status: 404, should return not found when user tries to access an articleId that does not exist", () => {
+    return request(app)
+      .get("/api/articles/999999")
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe(
+          "404 Error - An article with ID 999999 does not exist"
+        );
+      });
+  });
+});
