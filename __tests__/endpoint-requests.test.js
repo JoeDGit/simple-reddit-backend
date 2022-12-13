@@ -231,4 +231,14 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(error).toBe("400 Error - Bad Request");
       });
   });
+  test("status 400: should return a bad request when a post request is made by a user not in the database", () => {
+    return request(app)
+      .post("/api/articles/2wqte/comments")
+      .send({ username: "JoeDGit", body: "Hello world" })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("400 Error - Bad Request");
+      });
+  });
 });
