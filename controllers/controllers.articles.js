@@ -3,6 +3,7 @@ const {
   selectArticleById,
   selectArticleComments,
   checkIfArticleExists,
+  insertArticleComment,
 } = require("../models/models.articles");
 exports.getArticles = (req, res, next) => {
   selectArticles()
@@ -30,6 +31,17 @@ exports.getArticleComments = (req, res, next) => {
   ])
     .then(([comments]) => {
       res.status(200).send({ comments });
+    })
+    .catch(next);
+};
+
+exports.postArticleComment = (req, res, next) => {
+  const articleId = req.params.article_id;
+  const userComment = req.body;
+
+  insertArticleComment(articleId, userComment)
+    .then((comment) => {
+      res.status(201).send({ comment });
     })
     .catch(next);
 };

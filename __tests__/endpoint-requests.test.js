@@ -169,3 +169,68 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("status: 201, should post an object to comments with the specified properties", () => {
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send({ username: "butter_bridge", body: "Hello world" })
+      .expect(201)
+      .then((response) => {
+        const comment = response.body;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment: "Hello world",
+          })
+        );
+      })
+      .then(() => {
+        return request(app)
+          .get("/api/articles/2/comments")
+          .expect(200)
+          .then((response) => {
+            expect(response.body.comments).toHaveLength(1);
+          });
+      });
+  });
+  test("status: 400, should return bad request when body is missing required fields", () => {
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send({ body: "Hello world" })
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("400 Error - Bad Request");
+      });
+  });
+  test("status: 400, should return bad request when user tries to post a comment to an invalid article id", () => {
+    return request(app)
+      .post("/api/articles/2wqte/comments")
+      .send({ username: "butter_bridge", body: "Hello world" })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("400 Error - Bad Request");
+      });
+  });
+
+  test("status: 404, should return not found when user tries to post a comment to an article that does not exist ", () => {
+    return request(app)
+      .post("/api/articles/200000/comments")
+      .send({ username: "butter_bridge", body: "Hello world" })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("path not found");
+      });
+  });
+  test("status: 404, should return not found when a post request is made by a user not in the database", () => {
+    return request(app)
+      .post("/api/articles/2/comments")
+      .send({ username: "JoeDGit", body: "Hello world" })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("path not found");
+      });
+  });
+});
