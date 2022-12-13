@@ -87,7 +87,7 @@ describe("GET /api/articles/:article_id", () => {
           expect.objectContaining({
             author: expect.any(String),
             title: expect.any(String),
-            article_id: expect.any(Number),
+            article_id: 2,
             body: expect.any(String),
             topic: expect.any(String),
             created_at: expect.any(String),
