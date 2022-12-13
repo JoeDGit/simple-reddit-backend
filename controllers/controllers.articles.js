@@ -38,11 +38,9 @@ exports.getArticleComments = (req, res, next) => {
 exports.postArticleComment = (req, res, next) => {
   const articleId = req.params.article_id;
   const userComment = req.body;
-  Promise.all([
-    insertArticleComment(articleId, userComment),
-    checkIfArticleExists(articleId),
-  ])
-    .then(([comment]) => {
+
+  insertArticleComment(articleId, userComment)
+    .then((comment) => {
       res.status(201).send({ comment });
     })
     .catch(next);
