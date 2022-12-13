@@ -50,3 +50,16 @@ exports.checkIfArticleExists = (articleId) => {
       }
     });
 };
+
+exports.insertArticleComment = (articleId, userComment) => {
+  const { username, body } = userComment;
+  const SQL = `
+  INSERT INTO comments 
+  (author, body, article_id)
+  VALUES ($1, $2, $3)
+  RETURNING *`;
+  return db.query(SQL, [username, body, articleId]).then((comment) => {
+    const commentBody = comment.rows[0].body;
+    return commentBody;
+  });
+};
