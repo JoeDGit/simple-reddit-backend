@@ -171,7 +171,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
-  test("status: 200, should post an object to comments with the specified properties", () => {
+  test("status: 201, should post an object to comments with the specified properties", () => {
     return request(app)
       .post("/api/articles/2/comments")
       .send({ username: "butter_bridge", body: "Hello world" })
