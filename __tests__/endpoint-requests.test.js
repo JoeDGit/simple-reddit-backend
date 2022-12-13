@@ -233,7 +233,7 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
   test("status 400: should return a bad request when a post request is made by a user not in the database", () => {
     return request(app)
-      .post("/api/articles/2wqte/comments")
+      .post("/api/articles/2/comments")
       .send({ username: "JoeDGit", body: "Hello world" })
       .expect(400)
       .then((response) => {
