@@ -117,3 +117,55 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("status: 200, should return an array of comments for the given article Id, each with specified properties", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const comments = response.body.comments;
+        expect(comments).toHaveLength(11);
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("status: 200, should return an empty array when an article has no comments", () => {
+    return request(app)
+      .get("/api/articles/7/comments")
+      .expect(200)
+      .then((response) => {
+        const comments = response.body.comments;
+        expect(comments).toHaveLength(0);
+      });
+  });
+  test("status: 400, should return bad request when user tries to access comments for an invalid articleId", () => {
+    return request(app)
+      .get("/api/articles/ng3o253/comments")
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("400 Error - Bad Request");
+      });
+  });
+  test("status: 404, should return not found when user tries to access comments for an articleId that does not exist", () => {
+    return request(app)
+      .get("/api/articles/10101010/comments")
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe(
+          "404 Error - An article with ID 10101010 does not exist"
+        );
+      });
+  });
+});
