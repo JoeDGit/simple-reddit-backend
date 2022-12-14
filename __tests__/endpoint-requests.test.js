@@ -234,3 +234,88 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("status: 200, should increase an articles votes returning the updated object when passed a positive number", () => {
+    return request(app)
+      .patch("/api/articles/3/")
+      .send({ inc_votes: 5 })
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 3,
+            title: "Eight pug gifs that remind me of mitch",
+            topic: "mitch",
+            author: "icellusedkars",
+            body: "some gifs",
+            created_at: "2020-11-03T09:12:00.000Z",
+            votes: 5,
+          })
+        );
+      });
+  });
+  test("status: 200, decrease an articles votes returning the updated object when passed a negative number", () => {
+    return request(app)
+      .patch("/api/articles/1/")
+      .send({ inc_votes: -100 })
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            title: "Living in the shadow of a great man",
+            topic: "mitch",
+            author: "butter_bridge",
+            body: "I find this existence challenging",
+            created_at: "2020-07-09T20:11:00.000Z",
+            votes: 0,
+          })
+        );
+      });
+  });
+  test("status: 400, should return bad request when user tries update votes on an invalid article id", () => {
+    return request(app)
+      .patch("/api/articles/jwqte/")
+      .send({ inc_votes: 20 })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("400 Error - Bad Request");
+      });
+  });
+  test("status: 400, should return bad request when user enters a malformed body", () => {
+    return request(app)
+      .patch("/api/articles/1/")
+      .send({})
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("400 Error - Bad Request");
+      });
+  });
+  test("status: 400, should return bad request when user enters an incorrect data type in the request body", () => {
+    return request(app)
+      .patch("/api/articles/1/")
+      .send({ inc_votes: "hello" })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe("400 Error - Bad Request");
+      });
+  });
+  test("status: 404, should return path not found when user tries to update votes on an article that does not exist ", () => {
+    return request(app)
+      .patch("/api/articles/200000/")
+      .send({ inc_votes: 20 })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe(
+          "404 Error - An article with ID 200000 does not exist"
+        );
+      });
+  });
+});
