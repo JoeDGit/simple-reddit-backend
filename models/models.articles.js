@@ -63,3 +63,16 @@ exports.insertArticleComment = (articleId, userComment) => {
     return commentBody;
   });
 };
+
+exports.updateArticleVotes = (articleId, voteChange) => {
+  const { inc_votes } = voteChange;
+  const SQL = `
+  UPDATE articles
+  SET votes = votes + $2
+  WHERE article_id = $1
+  RETURNING *`;
+  return db.query(SQL, [articleId, inc_votes]).then((article) => {
+    const articleBody = article.rows[0];
+    return articleBody;
+  });
+};

@@ -4,6 +4,7 @@ const {
   selectArticleComments,
   checkIfArticleExists,
   insertArticleComment,
+  updateArticleVotes,
 } = require("../models/models.articles");
 exports.getArticles = (req, res, next) => {
   selectArticles()
@@ -42,6 +43,19 @@ exports.postArticleComment = (req, res, next) => {
   insertArticleComment(articleId, userComment)
     .then((comment) => {
       res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.patchArticleVotes = (req, res, next) => {
+  const articleId = req.params.article_id;
+  const voteChange = req.body;
+  Promise.all([
+    updateArticleVotes(articleId, voteChange),
+    checkIfArticleExists(articleId),
+  ])
+    .then(([article]) => {
+      res.status(200).send({ article });
     })
     .catch(next);
 };

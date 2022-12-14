@@ -6,6 +6,7 @@ const {
   getArticleById,
   getArticleComments,
   postArticleComment,
+  patchArticleVotes,
 } = require("./controllers/controllers.articles");
 const {
   handleBadPaths,
@@ -24,10 +25,11 @@ app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getArticleComments);
 app.post("/api/articles/:article_id/comments", postArticleComment);
+app.patch("/api/articles/:article_id", patchArticleVotes);
 
-app.all("*", handleBadPaths);
 app.use(handleBadRequests);
 app.use(handleCustomErrors);
+app.all("*", handleBadPaths);
 app.use(handleServerErrors);
 
 module.exports = app;
