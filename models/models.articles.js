@@ -1,14 +1,53 @@
-const db = require("../db/connection");
+const db = require('../db/connection');
 
-exports.selectArticles = () => {
-  const SQL = `
-  SELECT articles.*, COUNT(comments.article_id) AS comment_count
+exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc') => {
+  return db.query(`SELECT DISTINCT topic FROM articles`).then((topics) => {
+    const validTopicQueries = topics.rows.map((topic) => topic.topic);
+    const validSortByQueries = [
+      'title',
+      'topic',
+      'author',
+      'body',
+      'created_at',
+      'votes',
+    ];
+    const validOrderQueries = ['asc', 'desc'];
+    const queryValues = [];
+    if (!validOrderQueries.includes(order)) {
+      return Promise.reject({
+        status: 400,
+        msg: 'bad request - invalid sort order',
+      });
+    }
+    if (!validSortByQueries.includes(sort_by)) {
+      return Promise.reject({
+        status: 400,
+        msg: 'bad request - cannot sort results by that column',
+      });
+    }
+    if (topic && !validTopicQueries.includes(topic)) {
+      return Promise.reject({
+        status: 400,
+        msg: 'bad request - invalid topic',
+      });
+    }
+
+    let SQL = `
+SELECT articles.*, COUNT(comments.article_id) AS comment_count
 FROM articles
-LEFT JOIN comments ON comments.article_id = articles.article_id
-GROUP BY articles.article_id
-ORDER BY created_at desc;`;
-  return db.query(SQL).then((articles) => {
-    return articles.rows;
+LEFT JOIN comments ON comments.article_id = articles.article_id`;
+
+    if (topic) {
+      SQL += ` WHERE topic = $1`;
+      queryValues.push(topic);
+    }
+
+    SQL += ` GROUP BY articles.article_id
+ORDER BY ${sort_by} ${order}`;
+
+    return db.query(SQL, queryValues).then((articles) => {
+      return articles.rows;
+    });
   });
 };
 
