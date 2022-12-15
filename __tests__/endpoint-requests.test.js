@@ -435,7 +435,7 @@ describe('GET /api/users', () => {
   });
 });
 
-describe.only('DELETE /api/comments/:comment_id', () => {
+describe('DELETE /api/comments/:comment_id', () => {
   test('status: 204, should delete the given comment by comment_id and return status 204 no content', () => {
     return request(app)
       .delete('/api/comments/2')
