@@ -172,7 +172,7 @@ describe('GET /api/articles queries', () => {
 describe('GET /api/articles/:article_id', () => {
   test('status: 200, should return a single object with specified properties', () => {
     return request(app)
-      .get('/api/articles/2')
+      .get('/api/articles/1')
       .expect(200)
       .then((response) => {
         const article = response.body.article;
@@ -180,11 +180,12 @@ describe('GET /api/articles/:article_id', () => {
           expect.objectContaining({
             author: expect.any(String),
             title: expect.any(String),
-            article_id: 2,
+            article_id: 1,
             body: expect.any(String),
             topic: expect.any(String),
             created_at: expect.any(String),
             votes: expect.any(Number),
+            comment_count: '11',
           })
         );
       });
