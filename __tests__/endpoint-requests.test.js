@@ -76,7 +76,7 @@ describe('GET /api/articles', () => {
   });
 });
 
-describe.only('GET /api/articles queries', () => {
+describe('GET /api/articles queries', () => {
   test('status: 200, should accept a query: topic, filtering articles by the topic value provided', () => {
     return request(app)
       .get('/api/articles?topic=cats')
