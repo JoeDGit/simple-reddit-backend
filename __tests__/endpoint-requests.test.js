@@ -18,6 +18,18 @@ describe('General API Errors', () => {
       });
   });
 });
+describe('GET /api', () => {
+  test('status: 200, should return information regarding each endpoing in the api', () => {
+    return request(app)
+      .get('/api')
+      .expect(200)
+      .then((response) => {
+        const apiInfo = require('../endpoints.json');
+
+        expect(response.body).toEqual(apiInfo);
+      });
+  });
+});
 describe('GET /api/topics', () => {
   test('status: 200, should respond with an array of topic objects with slug and description properties ', () => {
     return request(app)
