@@ -434,3 +434,36 @@ describe('GET /api/users', () => {
       });
   });
 });
+
+describe('DELETE /api/comments/:comment_id', () => {
+  test('status: 204, should delete the given comment by comment_id and return status 204 no content', () => {
+    return request(app)
+      .delete('/api/comments/2')
+      .expect(204)
+      .then((response) => {
+        expect(response.status).toEqual(204);
+      });
+  });
+
+  test('status: 400, should return 400 - bad request when user enters an invalid comment id', () => {
+    return request(app)
+      .delete('/api/comments/hello')
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('bad request - invalid comment ID');
+      });
+  });
+
+  test('status: 404, Should return 404 - comment not found when passed a non-existent but valid comment id', () => {
+    return request(app)
+      .delete('/api/comments/10000')
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe(
+          '404 Error - A comment with ID: 10000 does not exist'
+        );
+      });
+  });
+});

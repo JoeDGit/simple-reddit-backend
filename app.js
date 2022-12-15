@@ -16,6 +16,7 @@ const {
 } = require('./controllers/controllers.errors');
 const { getUsers } = require('./controllers/controllers.users');
 const { lowerCaseQueries } = require('./controllers/controllers.utility');
+const { removeCommentById } = require('./controllers/controllers.comments');
 
 app.use(express.json());
 app.use(lowerCaseQueries);
@@ -32,6 +33,8 @@ app.post('/api/articles/:article_id/comments', postArticleComment);
 app.patch('/api/articles/:article_id', patchArticleVotes);
 
 app.get('/api/users', getUsers);
+
+app.delete('/api/comments/:comment_id', removeCommentById);
 
 app.all('*', handleBadPaths);
 app.use(handleBadRequests);
