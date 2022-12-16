@@ -26,7 +26,7 @@ describe('GET /api', () => {
       .then((response) => {
         const apiInfo = require('../endpoints.json');
 
-        expect(response.body).toEqual(apiInfo);
+        expect(response.body.apiInfo).toEqual(apiInfo);
       });
   });
 });
