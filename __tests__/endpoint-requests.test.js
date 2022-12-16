@@ -523,3 +523,76 @@ describe('DELETE /api/comments/:comment_id', () => {
       });
   });
 });
+describe('PATCH /api/comments/:comment_id', () => {
+  test('status: 200, should update a comments vote count and return the updated comment', () => {
+    return request(app)
+      .patch('/api/comments/1')
+      .send({ inc_votes: 5 })
+      .expect(200)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+            votes: 21,
+            author: 'butter_bridge',
+            article_id: 9,
+            comment_id: 1,
+            created_at: '2020-04-06T12:17:00.000Z',
+          })
+        );
+      });
+  });
+  test('status: 400, should return 400 bad request when a request is made to an invalid article id', () => {
+    return request(app)
+      .patch('/api/comments/hello')
+      .send({ inc_votes: 5 })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('400 Error - Bad Request');
+      });
+  });
+  test('status: 400, should return 400 bad request when a user omits a required body field', () => {
+    return request(app)
+      .patch('/api/comments/1')
+      .send({})
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('400 Error - Bad Request');
+      });
+  });
+  test('status: 400, should return 400 bad request when a user enters an invalid vote amount type', () => {
+    return request(app)
+      .patch('/api/comments/1')
+      .send({ inc_votes: 'hello' })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('400 Error - Bad Request');
+      });
+  });
+  test('status: 400, should return 400 bad request when a user enters an invalid vote key in the body', () => {
+    return request(app)
+      .patch('/api/comments/1')
+      .send({ up_the_votes: 5000 })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('400 Error - Bad Request');
+      });
+  });
+  test('status: 404, should return 404 not found when the article does not exist', () => {
+    return request(app)
+      .patch('/api/comments/10000')
+      .send({ inc_votes: 5 })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe(
+          '404 not found - A comment with Id 10000 does not exist'
+        );
+      });
+  });
+});

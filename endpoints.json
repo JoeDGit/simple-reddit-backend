@@ -110,6 +110,17 @@
     },
     "DELETE /api/comments/:comment_id": {
       "description": "Allows a user to delete a comment by a given comment_id"
+    },
+    "PATCH /api/comments/:comment_id": {
+      "description": "Allows a user to update the vote count of a given comment_id",
+      "exampleRequestBody": { "inc_votes": 5 },
+      "exampleResponse": {
+        "body": "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.",
+        "votes": 105,
+        "author": "icellusedkars",
+        "article_id": 1,
+        "created_at": 1583025180000
+      }
     }
   }
 ]

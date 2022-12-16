@@ -20,6 +20,7 @@ It includes support for:
 - Viewing a list of topics
 - Viewing comments by article Id
 - Posting a new comment to an article
+- Updating a comment's vote count
 - Deleting a comment by comment Id
 - Viewing a list of all registered users
 - Viewing a specific user's information by username
