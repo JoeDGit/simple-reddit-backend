@@ -447,6 +447,50 @@ describe('GET /api/users', () => {
   });
 });
 
+describe('GET /api/users/:username', () => {
+  test('status: 200, should return a user object matching the username passed in ', () => {
+    return request(app)
+      .get('/api/users/icellusedkars')
+      .expect(200)
+      .then((response) => {
+        const user = response.body.user;
+        expect(user).toEqual(
+          expect.objectContaining({
+            username: 'icellusedkars',
+            name: 'sam',
+            avatar_url:
+              'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4',
+          })
+        );
+      });
+  });
+  test('status: 200, should return a user object matching the username passed in when the username is entered in mixed case ', () => {
+    return request(app)
+      .get('/api/users/icELLuSedKars')
+      .expect(200)
+      .then((response) => {
+        const user = response.body.user;
+        expect(user).toEqual(
+          expect.objectContaining({
+            username: 'icellusedkars',
+            name: 'sam',
+            avatar_url:
+              'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4',
+          })
+        );
+      });
+  });
+  test('status: 404, should return not found when a username is entered that does not exist in the database', () => {
+    return request(app)
+      .get('/api/users/joeDGit')
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('User with username: joeDGit does not exist');
+      });
+  });
+});
+
 describe('DELETE /api/comments/:comment_id', () => {
   test('status: 204, should delete the given comment by comment_id and return status 204 no content', () => {
     return request(app)
