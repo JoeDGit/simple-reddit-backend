@@ -21,7 +21,8 @@ It includes support for:
 - Viewing comments by article Id
 - Posting a new comment to an article
 - Deleting a comment by comment Id
-- Viewing a list of registered users
+- Viewing a list of all registered users
+- Viewing a specific user's information by username
 
 ## Setup instructions
 
