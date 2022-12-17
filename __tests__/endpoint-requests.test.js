@@ -425,7 +425,7 @@ describe('PATCH /api/articles/:article_id', () => {
       });
   });
 });
-describe.only('POST /api/articles', () => {
+describe('POST /api/articles', () => {
   test('status: 200, should allow a user to post a new article, returning the posted article', () => {
     return request(app)
       .post('/api/articles')
