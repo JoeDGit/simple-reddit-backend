@@ -118,3 +118,15 @@ exports.updateArticleVotes = (articleId, voteChange) => {
     return articleBody;
   });
 };
+
+exports.insertArticle = (newArticle) => {
+  const { author, title, body, topic } = newArticle;
+  const SQL = `
+  INSERT INTO articles
+  (author, title, body, topic)
+  VALUES($1, $2, $3, $4)
+  RETURNING *`;
+  return db.query(SQL, [author, title, body, topic]).then((article) => {
+    return article.rows[0];
+  });
+};

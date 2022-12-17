@@ -425,6 +425,80 @@ describe('PATCH /api/articles/:article_id', () => {
       });
   });
 });
+describe.only('POST /api/articles', () => {
+  test('status: 200, should allow a user to post a new article, returning the posted article', () => {
+    return request(app)
+      .post('/api/articles')
+      .send({
+        author: 'icellusedkars',
+        title: 'Brand new article',
+        body: 'article body goes here',
+        topic: 'mitch',
+      })
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toEqual(
+          expect.objectContaining({
+            author: 'icellusedkars',
+            title: 'Brand new article',
+            body: 'article body goes here',
+            topic: 'mitch',
+            article_id: 13,
+            votes: 0,
+            created_at: expect.any(String),
+            comment_count: 0,
+          })
+        );
+      });
+  });
+  test('status: 400, should return bad request when a user does not include all required fields', () => {
+    return request(app)
+      .post('/api/articles')
+      .send({
+        author: 'icellusedkars',
+        title: 'Brand new article',
+        body: 'article body goes here',
+      })
+      .expect(400)
+      .then((response) => {
+        const msg = response.body.msg;
+        expect(msg).toBe('400 Error - Bad Request');
+      });
+  });
+
+  test('status: 404, should respond with not found when a user enters a topic that does not exist', () => {
+    return request(app)
+      .post('/api/articles')
+      .send({
+        author: 'icellusedkars',
+        title: 'Brand new article',
+        body: 'article body goes here',
+        topic: 'hats',
+      })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('path not found');
+      });
+  });
+
+  test('status: 404, should respond with not found when a user enters a username that does not exist', () => {
+    return request(app)
+      .post('/api/articles')
+      .send({
+        author: 'JoeDGit',
+        title: 'Brand new article',
+        body: 'article body goes here',
+        topic: 'mitch',
+      })
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('path not found');
+      });
+  });
+});
 
 describe('GET /api/users', () => {
   test('status: 200, should return an array of objects with the specified properties', () => {
