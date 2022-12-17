@@ -82,6 +82,26 @@
         ]
       }
     },
+    "POST /api/articles/": {
+      "description": "Allows a user to post a new article",
+      "queries": [],
+      "exampleRequestBody": {
+        "author": "icellusedkars",
+        "title": "Brand new article",
+        "body": "article body goes here",
+        "topic": "mitch"
+      },
+      "exampleResponse": {
+        "author": "icellusedkars",
+        "title": "Brand new article",
+        "body": "article body goes here",
+        "topic": "mitch",
+        "article_id": 13,
+        "votes": 0,
+        "created_at": "1527695953341",
+        "comment_count": 0
+      }
+    },
     "POST /api/articles/:article_id/comments": {
       "description": "Allows a user to post a new comment to an article with a given article_id",
       "queries": [],
