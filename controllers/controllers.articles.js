@@ -3,6 +3,7 @@ const {
   selectArticleById,
   selectArticleComments,
   checkIfArticleExists,
+  insertArticle,
   insertArticleComment,
   updateArticleVotes,
 } = require('../models/models.articles');
@@ -57,6 +58,16 @@ exports.patchArticleVotes = (req, res, next) => {
     checkIfArticleExists(articleId),
   ])
     .then(([article]) => {
+      res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.postArticle = (req, res, next) => {
+  const newArticle = req.body;
+  insertArticle(newArticle)
+    .then((article) => {
+      article.comment_count = 0;
       res.status(200).send({ article });
     })
     .catch(next);

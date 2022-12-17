@@ -15,6 +15,7 @@ It includes support for:
 
 - Viewing articles by Id
 - Viewing a list of all articles
+- Posting a new article
 - Sorting articles by title, topic, author, body, created_at, votes, comment count, and article_id in ascending or descending order
 - Updating an article's vote count
 - Viewing a list of topics
