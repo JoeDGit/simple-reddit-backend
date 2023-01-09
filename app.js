@@ -11,7 +11,7 @@ const {
 const { lowerCaseQueries } = require('./controllers/controllers.utility');
 const apiRouter = require('./routes/api-router');
 
-app.use(cors);
+app.use(cors());
 
 app.use(express.json());
 app.use(lowerCaseQueries);
