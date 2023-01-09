@@ -2,7 +2,7 @@
 
 ## Link to live version:
 
-https://news-site-backend.onrender.com/
+https://news-site-backend.onrender.com/api
 
 ---
 
