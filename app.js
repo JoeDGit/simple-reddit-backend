@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const {
   handleBadPaths,
@@ -9,6 +10,8 @@ const {
 } = require('./controllers/controllers.errors');
 const { lowerCaseQueries } = require('./controllers/controllers.utility');
 const apiRouter = require('./routes/api-router');
+
+app.use(cors);
 
 app.use(express.json());
 app.use(lowerCaseQueries);
