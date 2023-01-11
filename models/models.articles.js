@@ -10,6 +10,7 @@ exports.selectArticles = (topic, sort_by = 'created_at', order = 'desc') => {
       'body',
       'created_at',
       'votes',
+      'comment_count',
     ];
     const validOrderQueries = ['asc', 'desc'];
     const queryValues = [];
