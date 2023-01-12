@@ -102,8 +102,10 @@ exports.insertArticleComment = (articleId, userComment) => {
   VALUES ($1, $2, $3)
   RETURNING *`;
   return db.query(SQL, [username, body, articleId]).then((comment) => {
+    console.log(comment.rows);
     const commentBody = comment.rows[0].body;
-    return commentBody;
+    const commentId = comment.rows[0].comment_id;
+    return { commentId, commentBody };
   });
 };
 
