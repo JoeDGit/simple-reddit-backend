@@ -44,8 +44,8 @@ exports.postArticleComment = (req, res, next) => {
   const userComment = req.body;
 
   insertArticleComment(articleId, userComment)
-    .then(({ commentId, comment_body }) => {
-      res.status(201).send({ commentId, comment_body });
+    .then(({ commentId, commentBody }) => {
+      res.status(201).send({ commentId, commentBody });
     })
     .catch(next);
 };
