@@ -1,4 +1,4 @@
-# News site api
+# Simple Reddit API
 
 ## Link to live version:
 
