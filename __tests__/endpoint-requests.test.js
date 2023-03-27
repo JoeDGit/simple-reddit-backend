@@ -499,6 +499,37 @@ describe('POST /api/articles', () => {
       });
   });
 });
+describe('DELETE /api/articles/:article_id', () => {
+  test('status: 204, should delete the article by article_id and return status 204 no content', () => {
+    return request(app)
+      .delete('/api/articles/2')
+      .expect(204)
+      .then((response) => {
+        expect(response.status).toEqual(204);
+      });
+  });
+
+  test('status: 400, should return 400 - bad request when a user enters an invalid comment id', () => {
+    return request(app)
+      .delete('/api/articles/banana')
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('bad request - invalid article ID');
+      });
+  });
+  test('status: 404, should return 404 - article not found when passed a non-existent but valid article id', () => {
+    return request(app)
+      .delete('/api/articles/1000000000')
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe(
+          '404 Error - An article with ID: 1000000000 does not exist'
+        );
+      });
+  });
+});
 
 describe('GET /api/users', () => {
   test('status: 200, should return an array of objects with the specified properties', () => {
