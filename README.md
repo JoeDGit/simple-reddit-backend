@@ -1,4 +1,4 @@
-# News site api
+# Simple Reddit API
 
 ## Link to live version:
 
@@ -8,7 +8,7 @@ https://news-site-backend.onrender.com/api
 
 ## Summary
 
-This project provides a backend to a news site that allows a user to to view articles, comments, and registered users from a database.
+This project provides a backend to a news site that allows a user to view articles, comments, and registered users from a database.
 The project is written using `express.js` and `postgresql`. Tests are written in `jest`
 
 It includes support for:
