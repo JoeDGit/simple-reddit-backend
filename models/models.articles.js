@@ -132,3 +132,25 @@ exports.insertArticle = (newArticle) => {
     return article.rows[0];
   });
 };
+
+exports.deleteArticle = (articleId) => {
+  if (!/[0-9]/.test(articleId)) {
+    return Promise.reject({
+      status: 400,
+      msg: 'bad request - invalid article ID',
+    });
+  }
+  const SQL = `
+  DELETE FROM articles
+  WHERE article_id = $1
+  RETURNING *`;
+
+  return db.query(SQL, [articleId]).then(({ rowCount }) => {
+    if (rowCount === 0) {
+      return Promise.reject({
+        status: 404,
+        msg: `404 Error - An article with ID: ${articleId} does not exist`,
+      });
+    }
+  });
+};
