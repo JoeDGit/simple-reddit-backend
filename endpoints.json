@@ -129,7 +129,8 @@
       }
     },
     "DELETE /api/comments/:comment_id": {
-      "description": "Allows a user to delete a comment by a given comment_id"
+      "description": "Allows a user to delete a comment by a given comment_id",
+      "exampleRequestBody": {"comment_id": 42}
     },
     "PATCH /api/comments/:comment_id": {
       "description": "Allows a user to update the vote count of a given comment_id",
