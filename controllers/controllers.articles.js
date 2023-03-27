@@ -6,6 +6,7 @@ const {
   insertArticle,
   insertArticleComment,
   updateArticleVotes,
+  deleteArticle,
 } = require('../models/models.articles');
 exports.getArticles = (req, res, next) => {
   const { topic, sort_by, order } = req.query;
@@ -69,6 +70,15 @@ exports.postArticle = (req, res, next) => {
     .then((article) => {
       article.comment_count = 0;
       res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.deleteArticleById = (req, res, next) => {
+  const articleId = req.params.article_id;
+  deleteArticle(articleId)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch(next);
 };
