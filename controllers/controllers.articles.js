@@ -7,6 +7,7 @@ const {
   insertArticleComment,
   updateArticleVotes,
   deleteArticle,
+  updateArticleBody,
 } = require('../models/models.articles');
 exports.getArticles = (req, res, next) => {
   const { topic, sort_by, order } = req.query;
@@ -79,6 +80,20 @@ exports.deleteArticleById = (req, res, next) => {
   deleteArticle(articleId)
     .then(() => {
       res.sendStatus(204);
+    })
+    .catch(next);
+};
+
+exports.patchArticleBodyById = (req, res, next) => {
+  const articleId = req.params.article_id;
+  const updatedBody = req.body;
+
+  Promise.all([
+    updateArticleBody(articleId, updatedBody),
+    checkIfArticleExists(articleId),
+  ])
+    .then(([article]) => {
+      res.status(200).send({ article });
     })
     .catch(next);
 };

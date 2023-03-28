@@ -154,3 +154,22 @@ exports.deleteArticle = (articleId) => {
     }
   });
 };
+
+exports.updateArticleBody = (articleId, updatedBody) => {
+  const { body } = updatedBody;
+  if (body.length < 20) {
+    return Promise.reject({
+      status: 400,
+      msg: '400 bad request - body too short',
+    });
+  }
+  const SQL = `
+  UPDATE articles
+  SET body = $1
+  WHERE article_id = $2
+  RETURNING *`;
+  return db.query(SQL, [body, articleId]).then((article) => {
+    const articleBody = article.rows[0];
+    return articleBody;
+  });
+};

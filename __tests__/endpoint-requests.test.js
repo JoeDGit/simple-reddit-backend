@@ -286,7 +286,7 @@ describe('POST /api/articles/:article_id/comments', () => {
         const comment = response.body;
         expect(comment).toEqual(
           expect.objectContaining({
-            comment: 'Hello world',
+            commentBody: 'Hello world',
           })
         );
       })
@@ -526,6 +526,64 @@ describe('DELETE /api/articles/:article_id', () => {
         const error = response.body.msg;
         expect(error).toBe(
           '404 Error - An article with ID: 1000000000 does not exist'
+        );
+      });
+  });
+});
+
+describe('PATCH /api/articles/:article_id/body', () => {
+  test('status: 200, should updated the body of an articles, returning the updated article', () => {
+    return request(app)
+      .patch('/api/articles/3/body')
+      .send({ body: 'This is a test patch request' })
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: 3,
+            title: 'Eight pug gifs that remind me of mitch',
+            topic: 'mitch',
+            author: 'icellusedkars',
+            body: 'This is a test patch request',
+            created_at: '2020-11-03T09:12:00.000Z',
+            votes: 0,
+          })
+        );
+      });
+  });
+  test('Status: 400, should return a bad request when user tries to update the body of an invalid article id', () => {
+    return request(app)
+      .patch('/api/articles/hurrr/body')
+      .send({ body: 'This is a test patch request' })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('400 Error - Bad Request');
+      });
+  });
+
+  test.only('Status: 400, should return a bad request when user enters a post body that is too short', () => {
+    return request(app)
+      .patch('/api/articles/3/body')
+      .send({ body: 'hi' })
+      .expect(400)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe('400 bad request - body too short');
+      });
+  });
+
+  test('status: 404, should return path not found when user tries to update the body of an article that does not exist ', () => {
+    return request(app)
+      .patch('/api/articles/250000/body')
+      .send({ body: 'This is a test patch request' })
+
+      .expect(404)
+      .then((response) => {
+        const error = response.body.msg;
+        expect(error).toBe(
+          '404 Error - An article with ID 250000 does not exist'
         );
       });
   });
